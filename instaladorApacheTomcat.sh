@@ -8,13 +8,6 @@ apt upgrade -y
 apt install openjdk-17-jdk
 apt install openjdk-17-jre
 
-if java -version 2>&1 | grep -q "openjdk 17"; then
-    echo "Java 17 instalado correctamente."
-else
-    echo "Error: La instalación de Java no fue exitosa."
-    exit 1
-fi
-
 # Creamos un usuario y un grupo tomcat si no existen
 if id "tomcat" >/dev/null 2>&1; then
     echo "Usuario tomcat ya existe."
