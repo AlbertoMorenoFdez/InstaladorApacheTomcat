@@ -5,19 +5,30 @@ apt update -y
 apt upgrade -y
 
 # Instalamos Java JDK y verificamos la instalación
-apt install openjdk-17-jdk
-apt install openjdk-17-jre
+sudo apt install openjdk-17-jdk
+sudo apt install openjdk-17-jre
 
 # Creamos un usuario y un grupo tomcat si no existen
+echo "Creando el usuario tomcat."
 if id "tomcat" >/dev/null 2>&1; then
-    echo "Usuario tomcat ya existe."
+    echo "El usuario tomcat ya existe."
 else
     useradd -m -d /opt/tomcat -U -s /bin/false tomcat
 fi
 
+echo "Creando el grupo TomcatGroup."
+if getent group "TomcatGroup" >/dev/null 2>&1; then
+    echo "Grupo TomcatGroup ya existe"
+else
+    groupadd TomcatGroup
+fi
+# Asociamos el usuario tomcat al grupo TomcatGroup
+usermod -aG TomcatGroup tomcat
+
 # Descargamos Apache Tomcat desde el sitio oficial y verificamos dicha descarga
 wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.18/bin/apache-tomcat-10.1.18.tar.gz
 
+# Mostramos un mensaje de error y terminamos el script si no se pudo descargar Apache Tomcat
 if [ ! -f apache-tomcat-10.1.18.tar.gz ]; then
     echo "Error: No se pudo descargar Apache Tomcat."
     exit 1
@@ -29,8 +40,8 @@ mkdir -p /opt/tomcat
 # Descomprimimos Apache Tomcat en el directorio de instalación
 tar xzvf apache-tomcat-10.1.18.tar.gz -C /opt/tomcat --strip-components=1
 
-# Cambiamo el propietario y los permisos del directorio de instalación
-chown -R tomcat:tomcat /opt/tomcat
+# Cambiamos el propietario y los permisos del directorio de instalación
+chown -R tomcat:TomcatGroup /opt/tomcat
 chmod -R u+x /opt/tomcat/bin
 
 # Configuramos usuarios administradores añadiendo roles y usuarios a tomcat-users.xml
@@ -50,7 +61,7 @@ files_to_check=(
     "/opt/tomcat/webapps/host-manager/META-INF/context.xml"
 )
 
-# Si no se encuentra el archivo, se imprime un mensaje de error y se termina el script
+# Si no se encuentra el archivo, imprimimos un mensaje de error y se termina el script
 for file in "${files_to_check[@]}"; do
     if [ ! -f "$file" ]; then
         echo "Error: No se encontró el archivo $file."
