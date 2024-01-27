@@ -37,7 +37,7 @@ Es importante ejecutar los scripts con permisos de superusuario.
 
 ### Despliegue
 
-Para desplegar la pila de CloudFormation, ejecuta el script `desplegar.sh`:
+Para desplegar la pila de CloudFormation, ejecuta el script `desplegar.sh`con permisos de superusuario como ya se indica:
 
 ```sh
 ./desplegar.sh
