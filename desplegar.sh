@@ -4,7 +4,7 @@
 stack_name="TestStack"
 
 # Nombre del archivo YAML de la plantilla
-template_file="instancia.yaml"
+template_file="instancia.yml"
 
 # Comando para desplegar la pila
 # El comando 'aws cloudformation deploy' crea o actualiza una pila de CloudFormation
