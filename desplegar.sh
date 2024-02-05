@@ -21,3 +21,13 @@ else
   echo "El despliegue de la pila $stack_name ha fallado."
   exit 1
 fi
+
+if [ $? -eq 0 ]; then
+    PUBLIC_IP=$(aws cloudformation list-exports \
+        --query "Exports[?Name=='${stack_name}-InstancePublicIP'].Value" --output text)
+
+        URL="http://$PUBLIC_IP:8080"
+
+        echo "IP: $PUBLIC_IP"
+        echo "URL: $URL"
+fi

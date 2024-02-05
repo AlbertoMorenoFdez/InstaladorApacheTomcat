@@ -3,6 +3,8 @@
 # Nombre de la pila que se va a borrar
 stack_name="TestStack"
 
+echo "Se va a borrar la pila " $stack_name
+
 # Comprobamos que la pila existe antes de intentar borrarla
 if aws cloudformation describe-stacks --stack-name $stack_name > /dev/null 2>&1; then
 
