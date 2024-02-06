@@ -198,6 +198,34 @@ Resources:
           sudo systemctl start tomcat
           sudo systemctl enable tomcat
 
+          # Configuramos el firewall
+          ufw allow 8080
+
+          # Descargamos nuestro repositorio de GitHub
+          apt install git -y
+
+          # Nos movemos al directorio temporal
+          cd /tmp
+
+          # Clonamos el repositorio
+          git clone https://github.com/AlbertoMorenoFdez/InstaladorApacheTomcat
+
+          # Nos movemos al directorio de la app
+          cd InstaladorApacheTomcat/springholamundo-main
+
+          # Cambiamos los permisos del archivo gradlew
+          chmod +x gradlew
+
+          # Ejecutamos la tarea war
+          ./gradlew war
+
+          # Copiamos el war a la carpeta de tomcat
+          mv build/libs/holamundo.war /opt/tomcat/webapps
+
+          echo "Instalación completada, acceder a http://server_domain_or_IP:8080"
+          echo "Para entrar a tu app, accede a http://server_domain_or_IP:8080/app_name/endpoints"
+
+
           # Esta tiene que serla ultima instrucción
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2Instance --region ${AWS::Region}
       Tags:
